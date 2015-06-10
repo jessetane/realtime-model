@@ -19,6 +19,8 @@ function Model (storage, data) {
   this.loaded = false
   this.notFound = false
   this._onupdate = this._onupdate.bind(this)
+  this._onerror = this._onerror.bind(this)
+
   events.EventEmitter.call(this)
 }
 

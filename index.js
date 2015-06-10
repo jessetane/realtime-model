@@ -16,6 +16,8 @@ function Model (storage, data) {
   }
 
   this.data = data || {}
+  this.loaded = false
+  this.notFound = false
   this._onupdate = this._onupdate.bind(this)
   events.EventEmitter.call(this)
 }
@@ -200,6 +202,14 @@ Model.prototype._dodestroy = function (cb, err, oldData) {
 Model.prototype._processSnapshot = function (cb, snapshot) {
   var data = snapshot.val()
   var isPrivate = snapshot.ref().parent().parent().key() === 'private'
+
+  if (!data) {
+    loaded = false
+    notFound = true
+  } else {
+    loaded = true
+    notFound = false
+  }
 
   if (isPrivate) {
     for (var field in this.privateFields) {

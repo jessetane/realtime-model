@@ -1,14 +1,15 @@
 # realtime-model
 Firebase compatible model abstraction
 
-# Why
+## Why
 CRUD sucks. How about:  
 
 * `update`
 * `watch`
+* `unwatch`
 * `destroy`
 
 Instead?
 
-# License
+## License
 WTFPL

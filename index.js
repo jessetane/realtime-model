@@ -95,16 +95,19 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
   var q = queue()
 
   for (var field in this.uniqueFields) (function (field) {
-    if (oldData[field] !== this.data[field]) {
+    var oldValue = this.computeValueForUniqueField(field, oldData[field])
+    var newValue = this.computeValueForUniqueField(field, this.data[field])
+
+    if (newValue !== oldValue) {
       var uniqueOld = this.storage
         .unique
         .child(field)
-        .child(oldData[field])
+        .child(oldValue)
 
       var uniqueNew = this.storage
         .unique
         .child(field)
-        .child(this.data[field])
+        .child(newValue)
 
       q.push(function (cb) {
         uniqueNew.set(self.id, function (err) {
@@ -119,6 +122,10 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
     if (err) return cb(err)
     self._updatePublicAndPrivate(cb)
   })
+}
+
+Model.prototype.computeValueForUniqueField = function (field, value) {
+  return value
 }
 
 Model.prototype._updatePublicAndPrivate = function (cb) {

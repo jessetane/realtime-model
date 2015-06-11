@@ -119,23 +119,27 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
     var newValue = this.computeValueForUniqueField(field, this.data[field])
 
     if (newValue !== oldValue) {
-      var uniqueOld = oldValue && this.storage
+      var uniqueOld = oldValue !== undefined && oldValue !== null && this.storage
         .unique
         .child(field)
         .child(oldValue)
 
-      var uniqueNew = this.storage
+      var uniqueNew = newValue !== undefined && newValue !== null && this.storage
         .unique
         .child(field)
         .child(newValue)
 
       q.push(function (cb) {
-        uniqueNew.set(self.id, function (err) {
-          if (err) return cb(err)
-          if (oldValue) {
+        if (uniqueNew && uniqueOld) {
+          uniqueNew.set(self.id, function (err) {
+            if (err) return cb(err)
             uniqueOld.remove(cb)
-          }
-        })
+          })
+        } else if (uniqueNew) {
+          uniqueNew.set(self.id, cb)
+        } else if (uniqueOld) {
+          uniqueOld.remove(cb)
+        }
       })
     }
   }).call(this, field)

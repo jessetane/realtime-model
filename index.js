@@ -134,7 +134,10 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
       q.push(function (cb) {
         if (uniqueNew && uniqueOld) {
           uniqueNew.set(self.id, function (err) {
-            if (err) return cb(err)
+            if (err) {
+              err.code = 'CONFLICT'
+              return cb(err)
+            }
             uniqueOld.remove(cb)
           })
         } else if (uniqueNew) {

@@ -13,7 +13,7 @@ function Model (storage, data) {
   this.storage = {
     public: storage,
     private: storage.parent().parent().child('private/' + this.collectionId + '/' + this.id),
-    unique: storage.parent().parent().child('unique/' + this.collectionId + '/' + this.id)
+    unique: storage.parent().parent().child('unique/' + this.collectionId)
   }
 
   this.data = data || {}

@@ -50,6 +50,8 @@ Model.prototype.watch = function () {
     this.storage
       .private
       .on('value', this._onupdate)
+  } else {
+    this._status.private = 'notFound'
   }
 
   this.storage

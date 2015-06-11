@@ -20,7 +20,6 @@ function Model (storage, data) {
   this.loaded = false
   this.notFound = false
   this._onupdate = this._onupdate.bind(this)
-  this._onerror = this._onerror.bind(this)
 
   events.EventEmitter.call(this)
 }
@@ -32,12 +31,12 @@ Model.prototype.watch = function () {
   if (this.mine && this.privateFields) {
     this.storage
       .private
-      .on('value', this._onupdate, this._onerror)
+      .on('value', this._onupdate)
   }
 
   this.storage
     .public
-    .on('value', this._onupdate, this._onerror)
+    .on('value', this._onupdate)
 }
 
 Model.prototype.unwatch = function () {
@@ -47,12 +46,12 @@ Model.prototype.unwatch = function () {
   if (this.mine && this.privateFields) {
     this.storage
       .private
-      .off('value', this._onupdate, this._onerror)
+      .off('value', this._onupdate)
   }
 
   this.storage
     .public
-    .off('value', this._onupdate, this._onerror)
+    .off('value', this._onupdate)
 }
 
 Model.prototype._watchOnce = function (cb) {
@@ -231,8 +230,4 @@ Model.prototype._processSnapshot = function (cb, snapshot) {
 Model.prototype._onupdate = function (snapshot) {
   this._processSnapshot(null, snapshot)
   this.emit('update')
-}
-
-Model.prototype._onerror = function (err) {
-  this.emit('error', err)
 }

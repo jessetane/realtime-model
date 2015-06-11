@@ -13,7 +13,10 @@
   "keywords": [
     "firebase",
     "realtime",
-    "model"
+    "model",
+    "private",
+    "unique",
+    "fields"
   ],
   "author": "jesse.tane@gmail.com",
   "license": "WTFPL",

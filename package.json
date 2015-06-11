@@ -1,15 +1,7 @@
 {
   "name": "realtime-model",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Firebase compatible model abstraction",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jessetane/realtime-model.git"
-  },
   "keywords": [
     "firebase",
     "realtime",
@@ -18,12 +10,19 @@
     "unique",
     "fields"
   ],
-  "author": "jesse.tane@gmail.com",
-  "license": "WTFPL",
-  "homepage": "https://github.com/jessetane/realtime-model#readme",
+  "main": "index.js",
   "dependencies": {
     "deep-extend": "^0.4.0",
     "inherits": "^2.0.1",
     "queue": "^3.1.0"
-  }
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jessetane/realtime-model.git"
+  },
+  "author": "jesse.tane@gmail.com",
+  "license": "WTFPL"
 }

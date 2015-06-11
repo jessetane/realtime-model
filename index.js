@@ -195,7 +195,9 @@ Model.prototype._updatePublicAndPrivate = function (cb) {
 
 Model.prototype.destroy = function (cb) {
   if (this.privateFields && !this.mine) {
-    return cb(new Error('cannot destroy a model with private fields that does not belong to you'))
+    var err = new Error('cannot destroy a model with private fields that does not belong to you')
+    err.code = 'PERMISSION_DENIED'
+    return cb(err)
   } else if (this.uniqueFields) {
     this._watchOnce(this._dodestroy.bind(this, cb))
   } else {

@@ -101,7 +101,7 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
     var newValue = this.computeValueForUniqueField(field, this.data[field])
 
     if (newValue !== oldValue) {
-      var uniqueOld = this.storage
+      var uniqueOld = oldValue && this.storage
         .unique
         .child(field)
         .child(oldValue)
@@ -114,7 +114,9 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
       q.push(function (cb) {
         uniqueNew.set(self.id, function (err) {
           if (err) return cb(err)
-          uniqueOld.remove(cb)
+          if (oldValue) {
+            uniqueOld.remove(cb)
+          }
         })
       })
     }

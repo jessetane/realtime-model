@@ -209,11 +209,14 @@ Model.prototype._dodestroy = function (cb, err, oldData) {
   var privateStorage = this.storage.private
 
   for (var field in this.uniqueFields) {
-    var unique = this.storage
+    var oldValue = this.computeValueForUniqueField(field, this.data[field])
+    var unique = oldValue !== undefined && oldValue !== null && this.storage
       .unique
       .child(field)
-      .child(this.data[field])
-    q.push(unique.remove.bind(unique))
+      .child(oldValue)
+    if (unique) {
+      q.push(unique.remove.bind(unique))
+    }
   }
 
   if (this.mine && this.privateFields) {

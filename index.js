@@ -17,16 +17,34 @@ function Model (storage, data) {
   }
 
   this.data = data || {}
-  this.loaded = false
-  this.notFound = false
+  this._status = {}
   this._onupdate = this._onupdate.bind(this)
 
   events.EventEmitter.call(this)
 }
 
+Object.defineProperty(Model.prototype, 'loaded', {
+  get: function () {
+    return (this._status.public === 'loaded' &&
+            this._status.private === 'loaded') ||
+           (this._status.public === 'loaded' &&
+            this._status.private === 'notFound') ||
+           (this._status.public === 'notFound' &&
+            this._status.private === 'loaded')
+  }
+})
+
+Object.defineProperty(Model.prototype, 'notFound', {
+  get: function () {
+    return this._status.public === 'notFound' &&
+           this._status.private === 'notFound'
+  }
+})
+
 Model.prototype.watch = function () {
   if (this.watching) return
   this.watching = true
+  this._status = {}
 
   if (this.mine && this.privateFields) {
     this.storage
@@ -214,12 +232,8 @@ Model.prototype._processSnapshot = function (cb, snapshot) {
   var data = snapshot.val()
   var isPrivate = snapshot.ref().parent().parent().key() === 'private'
 
-  if (!data) {
-    loaded = false
-    notFound = true
-  } else {
-    loaded = true
-    notFound = false
+  if (this._status) {
+    this._status[isPrivate ? 'private' : 'public'] = data ? 'loaded' : 'notFound'
   }
 
   data && xtend(this.data, data)

@@ -19,6 +19,7 @@
   "license": "WTFPL",
   "homepage": "https://github.com/jessetane/realtime-model#readme",
   "dependencies": {
+    "deep-extend": "^0.4.0",
     "inherits": "^2.0.1",
     "queue": "^3.1.0"
   }

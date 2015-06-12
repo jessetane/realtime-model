@@ -257,5 +257,7 @@ Model.prototype._processSnapshot = function (cb, snapshot) {
 
 Model.prototype._onupdate = function (snapshot) {
   this._processSnapshot(null, snapshot)
-  this.emit('update')
+  if (this.loaded || this.notFound) {
+    this.emit('update')
+  }
 }

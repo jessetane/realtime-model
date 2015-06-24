@@ -132,18 +132,23 @@ Model.prototype._updateUnique = function (cb, err, oldData) {
         .child(newValue)
 
       q.push(function (cb) {
-        if (uniqueNew && uniqueOld) {
+        if (uniqueNew) {
           uniqueNew.set(self.id, function (err) {
             if (err) {
               err.code = 'CONFLICT'
               return cb(err)
             }
-            uniqueOld.remove(cb)
+            // only remove the old if the new was successful
+            if (uniqueOld) {
+              uniqueOld.remove(cb)
+            } else {
+              cb()
+            }
           })
-        } else if (uniqueNew) {
-          uniqueNew.set(self.id, cb)
         } else if (uniqueOld) {
           uniqueOld.remove(cb)
+        } else {
+          cb()
         }
       })
     }

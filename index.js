@@ -2,7 +2,6 @@ module.exports = Model
 
 var events = require('events')
 var inherits = require('inherits')
-var xtend = require('deep-extend')
 var queue = require('queue')
 
 inherits(Model, events.EventEmitter)
@@ -255,7 +254,24 @@ Model.prototype._processSnapshot = function (cb, snapshot) {
     this._status[isPrivate ? 'private' : 'public'] = data ? 'loaded' : 'notFound'
   }
 
-  data && xtend(this.data, data)
+  if (isPrivate) {
+    for (var field in this.privateFields) {
+      if (data) {
+        this.data[field] = data[field]
+      } else {
+        delete this.data[field]
+      }
+    }
+  } else {
+    for (var field in this.data) {
+      if (!this.privateFields || !this.privateFields[field]) {
+        delete this.data[field]
+      }
+    }
+    for (var field in data) {
+      this.data[field] = data[field]
+    }
+  }
 
   cb && cb()
 }

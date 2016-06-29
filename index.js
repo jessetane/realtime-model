@@ -256,7 +256,7 @@ Model.prototype._processSnapshot = function (cb, snapshot) {
 
   if (isPrivate) {
     for (var field in this.privateFields) {
-      if (data) {
+      if (data && data[field]) {
         this.data[field] = data[field]
       } else {
         delete this.data[field]
